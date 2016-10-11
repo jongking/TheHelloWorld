@@ -21,4 +21,4 @@ git clone https://github.com/jongking/TheHelloWorld/ XXXX
 
 添加拟主机
 
-项目主页:thw.jongking.com
+项目主页:http://thw.jongking.com
