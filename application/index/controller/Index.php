@@ -12,4 +12,10 @@ class Index
     {
         return '荷兰咯';
     }
+
+    public function index3()
+    {
+    	$member = Member::get(['UserName' => 'admin']);
+        return $member->Pwd;
+    }
 }
