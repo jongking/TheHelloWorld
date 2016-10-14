@@ -1,6 +1,8 @@
 <?php
 namespace app\index\controller;
 
+use app\index\model\Member
+
 class Index
 {
     public function index()
