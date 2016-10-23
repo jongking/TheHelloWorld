@@ -18,6 +18,7 @@ class Index
     public function index3()
     {
     	$member = Member::get(['UserName' => 'admin']);
-        return $member->Pwd;
+        $this->assign('member', member);
+        return $this->fetch();
     }
 }
