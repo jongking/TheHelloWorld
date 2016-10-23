@@ -18,7 +18,7 @@ class Index extends \think\Controller
     public function index3()
     {
     	$member = Member::get(['UserName' => 'admin']);
-        $this->assign('member', member);
+        $this->assign('member', $member);
         return $this->fetch();
     }
 }
