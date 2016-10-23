@@ -3,7 +3,7 @@ namespace app\index\controller;
 
 use app\index\model\Member;
 
-class Index
+class Index extends \think\Controller
 {
     public function index()
     {
@@ -17,9 +17,8 @@ class Index
 
     public function index3()
     {
-        $view = new View();
     	$member = Member::get(['UserName' => 'admin']);
-        $view->assign('member', member);
-        return $view->fetch();
+        $this->assign('member', member);
+        return $this->fetch();
     }
 }
