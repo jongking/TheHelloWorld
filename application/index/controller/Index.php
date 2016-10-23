@@ -17,8 +17,9 @@ class Index
 
     public function index3()
     {
+        $view = new View();
     	$member = Member::get(['UserName' => 'admin']);
-        $this->assign('member', member);
-        return $this->fetch();
+        $view->assign('member', member);
+        return $view->fetch();
     }
 }
