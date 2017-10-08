@@ -1,2 +1,47 @@
-{layout name="layout" /}
-{$member.Pwd}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <style type="text/css">
+        .TextContent{
+          float:left;
+          width: 32%;
+        }
+
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="/source/js/jquery-1.9.1.min.js"></script>
+        <div class="TextContent">
+        <table>
+        {volist name='list' id='model'}
+          <tr>
+            <td><a href="/index/index/showpc?Id={$model.Id}">{$model.Title}</a></td>
+          </tr>
+        {/volist}
+        </table>
+        </div>
+        <div class="TextContent">
+        <table>
+        {volist name='list' id='model'}
+          <tr>
+            <td><a href="/index/index/showpc?Id={$model.Id}">{$model.Title}</a></td>
+          </tr>
+        {/volist}
+        </table>
+        </div>
+        <div class="TextContent">
+        <table>
+        {volist name='list' id='model'}
+          <tr>
+            <td><a href="/index/index/showpc?Id={$model.Id}">{$model.Title}</a></td>
+          </tr>
+        {/volist}
+        </table>
+        </div>
+    </body>
+</html>

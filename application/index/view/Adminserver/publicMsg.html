@@ -1,34 +1,138 @@
 {layout name="serverlayout" /}
-<form>
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+<link href="/source/bootstrap337/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<form action="/index/Adminserver/AddPC" method="post" >
+  <div style="display:none;">
+    <input type="hidden" id="Id" name="Id">
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <label for="Title">标题</label>
+    <input type="text" class="form-control" id="Title" name="Title" placeholder="标题">
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <textarea id="editor" class="form-control"></textarea>
+    <label for="About">简介</label>
+    <textarea id="About" name="About" class="form-control" placeholder="简介"></textarea>
   </div>
   <div class="form-group">
-    <label for="exampleInputFile">File input</label>
-    <input type="file" id="exampleInputFile">
-    <p class="help-block">Example block-level help text here.</p>
+    <label for="Category">类别</label>
+    <input type="text" class="form-control" id="Category" name="Category" placeholder="类别" value="一般资讯">
   </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Check me out
-    </label>
+  <div class="form-group">
+    <label>发布时间</label>
+    <div class="input-group date form_datetime col-md-5" data-date-format="yyyy-mm-dd HH:ii" data-link-format="yyyy-mm-dd HH:ii">
+          <input class="form-control" id="PublishDate" name="PublishDate" size="16" type="text" value="11" readonly>
+    </div>
   </div>
-  <button type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group">
+    <label for="Author">作者</label>
+    <input type="text" class="form-control" id="Author" name="Author" placeholder="作者" value="本站原创">
+  </div>
+  <div class="form-group">
+  <div class="row">
+  <div class="col-xs-6 col-md-3">
+    <a href="#" class="thumbnail">
+      <img id="picImg" src="/source/images/uploaddefault.jpg">
+      <input name="ThumbImg" id="ThumbImg" type="hidden" value=""/>
+    </a>
+  </div>
+  </div>
+  </div>
+  <div class="form-group">
+    <label>主要内容</label>
+    <textarea id="MainEditor" name="MainEditor" class="form-control"></textarea>
+  </div>
+  <button type="submit" class="btn btn-default">提交</button>
 </form>
-<script src="/source/ckeditor473full/ckeditor.js"></script>
+<script type="text/javascript" src="/source/ckeditor473full/ckeditor.js"></script>
+<script type="text/javascript" src="/source/bootstrap337/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/source/bootstrap337/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/source/js/plupload/plupload.full.min.js"></script>
 <script type="text/javascript">
 $(function(){
-  CKEDITOR.replace( 'editor', {
+  CKEDITOR.replace( 'MainEditor', {
       uiColor: '#CCEAEE'
     } );
+
+  $("#PublishDate").datetimepicker({
+    language:  'zh-CN',
+    autoclose:true
+  });
+
+  $("#PublishDate").datetimepicker('update', new Date());
+
+  UploaderInit("picImg");
+
+  var id = GetQueryString("id");
+  if(id != null){
+    $.ajax({
+      type:"Post",
+      url:"/index/adminserver/GetPC",
+      date:{Id:id},
+      datetype:"json",
+      success:function(res){
+        for(var key in res){
+          if (res.hasOwnProperty(key)) { 
+              $("#" + key).val(res[key]);
+          }
+        }
+      }
+    });
+  }
+
 })
+
+        function UploaderInit(id) {
+            //实例化一个plupload上传对象
+            var uploader = new plupload.Uploader({
+                browse_button: id, //触发文件选择对话框的按钮，为那个元素id
+                url: '/index/adminserver/PluploadUpload', //服务器端的上传页面地址
+                flash_swf_url: '/source/js/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+                silverlight_xap_url: '/source/js/plupload/Moxie.xap', //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数'
+                filters: {
+                    mime_types: [ //只允许上传图片和zip文件
+                      { title: "Image files", extensions: "jpg,jpeg,gif,png" },
+                    ]
+                },
+                resize: {
+                    width: 800,
+                    height: 800
+                },
+                multi_selection: false
+            });
+            uploader.init();
+            uploader.bind('FilesAdded', function (uploader, files) {
+                PicLoading();
+                uploader.start();
+            });
+
+            uploader.bind('FileUploaded', function (uploader, file, responseObject) {
+                if (responseObject.status == 200) {
+                    var arr = responseObject.response.split("||");
+                    if (arr[0] == "OK") {
+                        $("#picImg").attr("src", '/uploads/' + arr[1]);
+                        $("#ThumbImg").val(arr[1]);
+                    }
+                    else {
+                        PicEndLoading();
+                        alert(arr);
+                    }
+                }
+                else {
+                    PicEndLoading();
+                    alert("发生错误");
+                }
+            });
+
+            uploader.bind('Error', function (uploader, errObject) {
+                PicEndLoading();
+                alert("只能上传jpg,jpeg,gif,png格式的图片");
+            });
+        }
+
+        function PicLoading() {
+            $("#picImg").attr("src", '/source/images/loading.gif');
+        }
+
+        function PicEndLoading() {
+            $("#picImg").attr("src", '/source/images/uploaddefault.jpg');
+        }
 </script>

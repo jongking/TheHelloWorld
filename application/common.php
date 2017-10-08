@@ -8,5 +8,20 @@
 // +----------------------------------------------------------------------
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
+use think\Session;
 // 应用公共文件
+    function SetLoginMessage($model)
+    {
+    	Session::set('UserName', $model->UserName);
+    	Session::set('Pwd', $model->Pwd);
+    }
+
+    function ClearLoginMessage()
+    {
+    	Session::clear();
+    }
+
+    function CheckLoginMessage()
+    {
+    	return Session::has('UserName');
+    }
